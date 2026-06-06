@@ -1802,8 +1802,7 @@ class BoundCongressionalRecordListItem(EntityBase, RecordTypeBase):
         Optional[str],
         Field(
             default=None,
-            alias="referenceId",
-            description="Reference id parsed from the source URL (non-unique).",
+            description="Stable reference identifier for this bound record (e.g. 'bound-congressional-record:1947:3:17').",
         ),
     ] = None
 
@@ -2087,6 +2086,22 @@ class CongressionalRecordIssue(EntityBase, RecordTypeBase):
     ]
 
 
+class CommitteeRef(BaseModel):
+    """Minimal committee cross-reference (name, system code, API URL)."""
+
+    name: Annotated[
+        Optional[str], Field(default=None, description="Display name of the committee.")
+    ] = None
+    system_code: Annotated[
+        Optional[str],
+        Field(default=None, alias="systemCode", description="Committee system code."),
+    ] = None
+    url: Annotated[
+        Optional[HttpUrl],
+        Field(default=None, description="API URL for this committee."),
+    ] = None
+
+
 class CommitteeListItem(EntityBase, RecordTypeBase):
     """List-level committee entry with system code and metadata."""
 
@@ -2128,6 +2143,20 @@ class CommitteeListItem(EntityBase, RecordTypeBase):
             description="When the committee was last updated.",
         ),
     ]
+    parent: Annotated[
+        Optional[CommitteeRef],
+        Field(
+            default=None,
+            description="Parent committee when this entry is a subcommittee.",
+        ),
+    ] = None
+    subcommittees: Annotated[
+        Optional[List[CommitteeRef]],
+        Field(
+            default=None,
+            description="Child subcommittees belonging to this committee.",
+        ),
+    ] = None
 
 
 class CommitteeReportListItem(EntityBase, RecordTypeBase):
@@ -2927,14 +2956,21 @@ class CommitteeMeetingItem(EntityBase, RecordTypeBase):
 
     event_id: Annotated[
         Optional[int],
-        Field(default=None, alias="eventId", description="What the event identifier is."),
+        Field(
+            default=None, alias="eventId", description="What the event identifier is."
+        ),
     ] = None
     update_date: Annotated[
         Optional[datetime],
-        Field(default=None, alias="updateDate", description="When the record was last updated."),
+        Field(
+            default=None,
+            alias="updateDate",
+            description="When the record was last updated.",
+        ),
     ] = None
     congress: Annotated[
-        Optional[int], Field(default=None, description="Which Congress the meeting belongs to.")
+        Optional[int],
+        Field(default=None, description="Which Congress the meeting belongs to."),
     ] = None
     type: Annotated[
         Optional[str], Field(default=None, description="What type of meeting this is.")
@@ -2944,19 +2980,26 @@ class CommitteeMeetingItem(EntityBase, RecordTypeBase):
     ] = None
     meeting_status: Annotated[
         Optional[str],
-        Field(default=None, alias="meetingStatus", description="What the meeting status is."),
+        Field(
+            default=None,
+            alias="meetingStatus",
+            description="What the meeting status is.",
+        ),
     ] = None
     date: Annotated[
         Optional[datetime], Field(default=None, description="When the meeting occurs.")
     ] = None
     chamber: Annotated[
-        Optional[str], Field(default=None, description="Which chamber held the meeting.")
+        Optional[str],
+        Field(default=None, description="Which chamber held the meeting."),
     ] = None
     committees: Annotated[
-        Optional[List[dict]], Field(default=None, description="Which committees held the meeting.")
+        Optional[List[dict]],
+        Field(default=None, description="Which committees held the meeting."),
     ] = None
     url: Annotated[
-        Optional[HttpUrl], Field(default=None, description="Where to retrieve this record in the API.")
+        Optional[HttpUrl],
+        Field(default=None, description="Where to retrieve this record in the API."),
     ] = None
 
     @model_validator(mode="before")
@@ -2980,19 +3023,24 @@ class CommitteePrintItem(EntityBase, RecordTypeBase):
 
     jacket_number: Annotated[
         Optional[int],
-        Field(default=None, alias="jacketNumber", description="What the jacket number is."),
+        Field(
+            default=None, alias="jacketNumber", description="What the jacket number is."
+        ),
     ] = None
     citation: Annotated[
         Optional[str], Field(default=None, description="What the citation is.")
     ] = None
     congress: Annotated[
-        Optional[int], Field(default=None, description="Which Congress the print belongs to.")
+        Optional[int],
+        Field(default=None, description="Which Congress the print belongs to."),
     ] = None
     chamber: Annotated[
-        Optional[str], Field(default=None, description="Which chamber produced the print.")
+        Optional[str],
+        Field(default=None, description="Which chamber produced the print."),
     ] = None
     committees: Annotated[
-        Optional[List[dict]], Field(default=None, description="Which committees produced the print.")
+        Optional[List[dict]],
+        Field(default=None, description="Which committees produced the print."),
     ] = None
     title: Annotated[
         Optional[str], Field(default=None, description="What the print title is.")
@@ -3002,10 +3050,15 @@ class CommitteePrintItem(EntityBase, RecordTypeBase):
     ] = None
     update_date: Annotated[
         Optional[datetime],
-        Field(default=None, alias="updateDate", description="When the record was last updated."),
+        Field(
+            default=None,
+            alias="updateDate",
+            description="When the record was last updated.",
+        ),
     ] = None
     url: Annotated[
-        Optional[HttpUrl], Field(default=None, description="Where to retrieve this record in the API.")
+        Optional[HttpUrl],
+        Field(default=None, description="Where to retrieve this record in the API."),
     ] = None
 
     @model_validator(mode="before")

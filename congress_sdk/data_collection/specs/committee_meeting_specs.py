@@ -5,7 +5,10 @@ from congress_sdk.data_collection.endpoint_registry import (
     get_spec,
     register_specs,
 )
-from congress_sdk.models.other_models import CommitteeMeetingListItem, CommitteeMeetingItem
+from congress_sdk.models.other_models import (
+    CommitteeMeetingListItem,
+    CommitteeMeetingItem,
+)
 
 
 list_spec = EndpointSpec(

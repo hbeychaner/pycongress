@@ -97,6 +97,13 @@ class CongressMetadata(BaseModel):
     end_year: Annotated[
         Optional[int], Field(alias="endYear", default=None, description="End year")
     ] = None
+    sessions: Annotated[
+        Optional[List["Session"]],
+        Field(
+            default=None,
+            description="Congressional sessions included in this Congress.",
+        ),
+    ] = None
 
 
 class Depiction(BaseModel):
