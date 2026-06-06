@@ -1547,14 +1547,21 @@ class HouseRollCallVoteListItem(EntityBase, RecordTypeBase):
             description="Where to retrieve the source vote data.",
         ),
     ]
-    # Accept `legislationUrl` from the API as an alias for `url` while still
-    # allowing `url` to be used when populating by name.
+    # The API returns `url` (plain) for the vote API endpoint and `legislationUrl`
+    # in some older contexts. Accept both via a model_validator normalisation.
     url: Annotated[
         Optional[HttpUrl],
         Field(
             default=None,
-            alias="legislationUrl",
             description="Where to retrieve the vote record in the API.",
+        ),
+    ] = None
+    legislation_url: Annotated[
+        Optional[HttpUrl],
+        Field(
+            default=None,
+            alias="legislationUrl",
+            description="Alias for url; kept for backward compatibility.",
         ),
     ] = None
 
