@@ -1187,6 +1187,27 @@ class Amendment(BaseModel):
         Field(alias="amendedBill", description="Which bill is amended, if applicable."),
     ] = None
 
+    amended_amendment: Annotated[
+        Optional[Any],
+        Field(
+            alias="amendedAmendment",
+            description="Which amendment is further amended by this amendment, if applicable.",
+        ),
+    ] = None
+
+    amendments_to_amendment: Annotated[
+        Optional[Any],
+        Field(
+            alias="amendmentsToAmendment",
+            description="Which amendments further amend this amendment.",
+        ),
+    ] = None
+
+    notes: Annotated[
+        Optional[Any],
+        Field(description="Any notes associated with the amendment."),
+    ] = None
+
     links: Annotated[
         Optional[List[dict]],
         Field(
