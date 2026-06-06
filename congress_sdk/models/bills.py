@@ -1002,6 +1002,10 @@ class Subjects(BaseModel):
 class BillMetadata(EntityBase):
     """List-level bill metadata used for related bill references."""
 
+    recordType: Annotated[
+        str, Field(description="Which knowledgebase index this record belongs to.")
+    ] = "congress-bills"
+
     congress: Annotated[int, Field(description="Which Congress the bill belongs to.")]
     latest_action: Annotated[
         Optional[LatestAction],

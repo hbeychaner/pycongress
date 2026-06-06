@@ -71,6 +71,10 @@ class Congress(BaseModel):
 class CongressMetadata(BaseModel):
     """Minimal Congress metadata used in nested API responses."""
 
+    id: Annotated[
+        Optional[str],
+        Field(default=None, description="Stable identifier: 'congress:{number}'."),
+    ] = None
     number: Annotated[
         Optional[int],
         Field(
@@ -104,6 +108,21 @@ class CongressMetadata(BaseModel):
             description="Congressional sessions included in this Congress.",
         ),
     ] = None
+
+    @model_validator(mode="after")
+    def _derive_id_and_number(self) -> "CongressMetadata":
+        """Populate number (from URL path) and id when not set by the API."""
+        if self.url and not self.number:
+            try:
+                # URL: https://api.congress.gov/v3/congress/119[?format=json]
+                path = str(self.url).split("?")[0].rstrip("/")
+                segment = path.split("/")[-1]
+                self.number = int(segment)
+            except (ValueError, IndexError):
+                pass
+        if self.number and not self.id:
+            self.id = f"congress:{self.number}"
+        return self
 
 
 class Depiction(BaseModel):
