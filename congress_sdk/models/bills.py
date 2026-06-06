@@ -1037,6 +1037,15 @@ class BillMetadata(EntityBase):
         ),
     ] = None
 
+    update_date: Annotated[
+        Optional[datetime],
+        Field(
+            alias="updateDate",
+            default=None,
+            description="When the bill was last updated.",
+        ),
+    ] = None
+
     @model_validator(mode="after")
     def _populate_id_if_missing(cls, model):
         """Ensure a deterministic `id` is present when possible."""
