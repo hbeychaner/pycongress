@@ -7,6 +7,8 @@ from . import (
     amendment_specs,
     bill_specs,
     bound_congressional_record_specs,
+    committee_meeting_specs,
+    committee_print_specs,
     committee_report_specs,
     committee_specs,
     congress_specs,
@@ -19,6 +21,7 @@ from . import (
     communication_specs,
     house_requirement_specs,
     house_vote_specs,
+    summaries_specs,
     treaty_specs,
 )
 
@@ -26,6 +29,8 @@ __all__ = [
     "amendment_specs",
     "bill_specs",
     "bound_congressional_record_specs",
+    "committee_meeting_specs",
+    "committee_print_specs",
     "committee_report_specs",
     "committee_specs",
     "congress_specs",
@@ -38,5 +43,6 @@ __all__ = [
     "communication_specs",
     "house_requirement_specs",
     "house_vote_specs",
+    "summaries_specs",
     "treaty_specs",
 ]

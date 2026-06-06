@@ -2916,3 +2916,105 @@ class TreatyNumber(BaseModel):
     The assigned treaty number.
     """
     treaty_number: Annotated[int, Field(description="What the treaty number is.")]
+
+
+class CommitteeMeetingItem(EntityBase, RecordTypeBase):
+    """Item-level committee meeting record from /committee-meeting/{congress}/{chamber}/{eventId}."""
+
+    recordType: Annotated[
+        str, Field(description="Which knowledgebase index this record belongs to.")
+    ] = "congress-committee-meeting"
+
+    event_id: Annotated[
+        Optional[int],
+        Field(default=None, alias="eventId", description="What the event identifier is."),
+    ] = None
+    update_date: Annotated[
+        Optional[datetime],
+        Field(default=None, alias="updateDate", description="When the record was last updated."),
+    ] = None
+    congress: Annotated[
+        Optional[int], Field(default=None, description="Which Congress the meeting belongs to.")
+    ] = None
+    type: Annotated[
+        Optional[str], Field(default=None, description="What type of meeting this is.")
+    ] = None
+    title: Annotated[
+        Optional[str], Field(default=None, description="What the meeting title is.")
+    ] = None
+    meeting_status: Annotated[
+        Optional[str],
+        Field(default=None, alias="meetingStatus", description="What the meeting status is."),
+    ] = None
+    date: Annotated[
+        Optional[datetime], Field(default=None, description="When the meeting occurs.")
+    ] = None
+    chamber: Annotated[
+        Optional[str], Field(default=None, description="Which chamber held the meeting.")
+    ] = None
+    committees: Annotated[
+        Optional[List[dict]], Field(default=None, description="Which committees held the meeting.")
+    ] = None
+    url: Annotated[
+        Optional[HttpUrl], Field(default=None, description="Where to retrieve this record in the API.")
+    ] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_committee_meeting(cls, values: dict) -> dict:
+        if not values.get("id"):
+            congress = values.get("congress")
+            chamber = (values.get("chamber") or "").lower()
+            event_id = values.get("eventId") or values.get("event_id")
+            if congress and chamber and event_id:
+                values["id"] = f"committee-meeting:{congress}:{chamber}:{event_id}"
+        return values
+
+
+class CommitteePrintItem(EntityBase, RecordTypeBase):
+    """Item-level committee print record from /committee-print/{congress}/{chamber}/{jacketNumber}."""
+
+    recordType: Annotated[
+        str, Field(description="Which knowledgebase index this record belongs to.")
+    ] = "congress-committee-print"
+
+    jacket_number: Annotated[
+        Optional[int],
+        Field(default=None, alias="jacketNumber", description="What the jacket number is."),
+    ] = None
+    citation: Annotated[
+        Optional[str], Field(default=None, description="What the citation is.")
+    ] = None
+    congress: Annotated[
+        Optional[int], Field(default=None, description="Which Congress the print belongs to.")
+    ] = None
+    chamber: Annotated[
+        Optional[str], Field(default=None, description="Which chamber produced the print.")
+    ] = None
+    committees: Annotated[
+        Optional[List[dict]], Field(default=None, description="Which committees produced the print.")
+    ] = None
+    title: Annotated[
+        Optional[str], Field(default=None, description="What the print title is.")
+    ] = None
+    number: Annotated[
+        Optional[str], Field(default=None, description="What the print number is.")
+    ] = None
+    update_date: Annotated[
+        Optional[datetime],
+        Field(default=None, alias="updateDate", description="When the record was last updated."),
+    ] = None
+    url: Annotated[
+        Optional[HttpUrl], Field(default=None, description="Where to retrieve this record in the API.")
+    ] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_committee_print(cls, values: dict) -> dict:
+        if not values.get("id"):
+            congress = values.get("congress")
+            chamber = (values.get("chamber") or "").lower()
+            jacket_number = values.get("jacketNumber") or values.get("jacket_number")
+            if congress and chamber and jacket_number:
+                values["id"] = f"committee-print:{congress}:{chamber}:{jacket_number}"
+        return values
