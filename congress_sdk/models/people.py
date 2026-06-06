@@ -521,6 +521,8 @@ class Member(EntityBase):
 
     @model_validator(mode="before")
     def _populate_from_alternate_fields(cls, values: dict):
+        if not isinstance(values, dict):
+            return values
         # Populate `fullName` from `directOrderName` or `invertedOrderName` when present
         if "fullName" not in values:
             if "directOrderName" in values and values.get("directOrderName"):
