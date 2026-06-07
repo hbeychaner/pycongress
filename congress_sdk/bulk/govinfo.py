@@ -267,8 +267,9 @@ class GovInfoBulkClient:
             json.dumps(records, ensure_ascii=False, indent=2, default=str),
             encoding="utf-8",
         )
+        pre_existing = len(records) - total_new
         logger.info(
-            "Congress %d: %d new + %d existing = %d total bills, %d errors → %s",
-            congress, total_new, len(seen_ids) - errors, len(records), errors, json_path,
+            "Congress %d: %d new bills saved (%d pre-existing, %d total, %d errors) → %s",
+            congress, total_new, pre_existing, len(records), errors, json_path,
         )
         return records
